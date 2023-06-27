@@ -1,0 +1,457 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@600&family=Montserrat:wght@400;600&display=swap');
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css");
+
+html {
+    --black: #000000;
+    --white: #ffffff;
+    --transparent-black: rgba(0, 0, 0, 0.3);
+    --shadow-grey: rgba(255, 255, 255, 0.5);
+    --purple: #9648FF;
+    --purple-dark: #6832b0;
+    --red: #ff0000;
+    --released: #32cd32;
+    --unreleased: #ff0000;
+    --csfd-red: #8c0406;
+    --imdb-yellow: #F5C518;
+    --dabingforum-blue: #0076B1;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 400;
+}
+
+body {
+    background-color: var(--black);
+    color: var(--white);
+}
+
+#movies {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin: auto;
+    width: fit-content;
+}
+
+#nomovies {
+    font-size: 1.5rem;
+    margin: auto;
+    padding: 2rem 0;
+    text-align: center;
+    width: fit-content;
+}
+
+#nomovies .bi {
+    position: initial;
+}
+
+.movie {
+    float: left;
+    height: fit-content;
+    margin: 20px;
+    opacity: 0;
+    position: relative;
+    text-align: center;
+    transition: opacity 1s, width 0.5s;
+    width: 160px;
+}
+
+.movie:hover,
+.movie:focus {
+    width: 170px;
+}
+
+.poster img {
+    border-radius: 10px;
+    transition: width 0.5s, border-radius 0.5s;
+    width: 150px;
+}
+
+.movie:hover .poster img,
+.movie:focus .poster img {
+    border-radius: 0px;
+    width: 170px;
+}
+
+.name {
+    font-family: "Montserrat", sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.movie .name {
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    display: -webkit-box;
+    height: 5.2rem;
+    margin: auto;
+    overflow: hidden;
+    text-align: center;
+    width: 10rem;
+}
+
+.movie .type {
+    display: inline-block;
+    text-align: right;
+    width: 35%;
+}
+
+.movie b {
+    display: inline-block;
+    opacity: 0;
+    padding-left: 3%;
+    text-align: left;
+    transition: opacity 1s;
+    width: 62%;
+}
+
+.released,
+.unreleased {
+    opacity: 1 !important;
+}
+
+.released {
+    color: var(--released);
+}
+
+.unreleased {
+    color: var(--unreleased);
+}
+
+.poster {
+    align-items: center;
+    display: flex;
+    height: 250px;
+    justify-content: center;
+}
+
+.delta-days {
+    -webkit-text-stroke: 4px var(--shadow-grey);
+    color: var(--transparent-black);
+    font-family: "Montserrat Alternate", sans-serif;
+    font-size: 10rem;
+    font-weight: 600;
+    opacity: 1;
+    position: absolute;
+    transition: opacity 0.5s, width 0.5s;
+    z-index: 0;
+}
+
+.delta-days:hover,
+.movie:hover .delta-days,
+.movie:focus .delta-days {
+    opacity: 0;
+    z-index: -1;
+}
+
+.delta-days2 {
+    font-size: 8rem;
+}
+
+.delta-days3 {
+    font-size: 5rem;
+}
+
+.links {
+    display: flex;
+    opacity: 0;
+    transition: border 0.5s, opacity 0.5s;
+    width: fit-content;
+}
+
+.links span {
+    align-items: center;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    font-family: "Montserrat Alternate", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    height: 2.15rem;
+    justify-content: center;
+    margin: 0.1rem;
+    transition: opacity 0.5s, border 0.5s;
+    width: 2.15rem;
+}
+
+.csfd span {
+    background-color: var(--csfd-red);
+    border: 0.2rem solid var(--csfd-red);
+}
+
+.imdb span {
+    background-color: var(--imdb-yellow);
+    border: 0.2rem solid var(--imdb-yellow);
+    color: var(--black);
+}
+
+.dabingforum span {
+    background-color: var(--dabingforum-blue);
+    border: 0.2rem solid var(--dabingforum-blue);
+}
+
+.links img {
+    border-radius: 10px;
+    height: 100%;
+    width: 100%;
+}
+
+a,
+a:hover,
+a:visited {
+    color: var(--white);
+    text-decoration: none;
+}
+
+.links a:hover>span {
+    border: 0.2rem solid var(--white);
+}
+
+.movie:hover>.links,
+.movie:focus>.links {
+    opacity: 1;
+}
+
+#top-bar {
+    display: block;
+    margin: auto;
+    width: 50%;
+}
+
+#query {
+    background-color: var(--black);
+    border: none;
+    border-bottom: 1px solid var(--white);
+    color: var(--white);
+    display: inline-block;
+    font-size: 1.5rem;
+    margin-left: 2%;
+    transition: width 0.5s, margin 0.5s;
+    width: 86%;
+}
+
+#query:hover,
+#query:focus {
+    margin-left: 0;
+    width: 90%;
+}
+
+#top-bar:hover:has(#query:focus)~#search-results,
+#search-results:hover {
+    display: block;
+    opacity: 1;
+    z-index: 1;
+}
+
+#search-results {
+    background-color: var(--black);
+    border-radius: 10px;
+    display: none;
+    left: 25%;
+    margin: auto;
+    opacity: 0;
+    padding: 10px;
+    position: absolute;
+    top: 3rem;
+    transition: opacity 0.5s, display 0.5s, z-index 0.5s;
+    width: 44%;
+    z-index: -1;
+}
+
+.search-result {
+    display: inline-block;
+    width: 100%;
+}
+
+#toggle-countdown-button,
+#toggle-edit-button,
+.add-movie-button,
+.delete-movie-button {
+    display: inline-block;
+    font-size: 2rem;
+    height: 2rem;
+    position: relative;
+    width: 2rem;
+}
+
+.add-movie-button {
+    margin-right: 5px;
+}
+
+.delete-movie-button {
+    font-size: 1.5rem !important;
+    padding-top: 0.3rem;
+}
+
+.bi {
+    position: absolute;
+    transition: opacity 0.5s, color 0.5s;
+}
+
+#toggle-countdown-button .bi-5-square,
+#toggle-edit-button .bi-wrench-adjustable-circle {
+    color: var(--white);
+}
+
+#toggle-countdown-button .bi-5-square-fill,
+#toggle-countdown-button .bi-5-square:hover,
+#toggle-edit-button .bi-wrench-adjustable-circle-fill,
+#toggle-edit-button .bi-wrench-adjustable-circle:hover,
+.add-movie-button .bi-plus-circle-fill {
+    color: var(--purple);
+}
+
+#toggle-countdown-button .bi-5-square-fill:hover,
+#toggle-edit-button .bi-wrench-adjustable-circle-fill:hover {
+    color: var(--purple-dark);
+}
+
+.delete-movie-button .bi-trash-fill {
+    color: var(--red);
+}
+
+.add-movie-button .bi-plus-circle-dotted,
+.delete-movie-button .bi-trash {
+    opacity: 1;
+}
+
+.add-movie-button .bi-plus-circle-fill,
+.delete-movie-button .bi-trash-fill {
+    opacity: 0;
+}
+
+.add-movie-button:hover>.bi-plus-circle-dotted,
+.delete-movie-button:hover>.bi-trash {
+    opacity: 0;
+}
+
+.add-movie-button:hover>.bi-plus-circle-fill,
+.delete-movie-button:hover>.bi-trash-fill {
+    opacity: 1;
+}
+
+.search-result .name {
+    display: inline-block;
+    height: 100%;
+    padding: 15px 5px;
+    text-align: left;
+    transition: color 0.5s;
+    width: fit-content;
+}
+
+.search-result .year {
+    transition: color 0.5s;
+}
+
+.search-result:hover>.name {
+    color: var(--purple);
+}
+
+.search-result:hover>.year {
+    color: var(--purple-dark);
+}
+
+#spinner::after {
+    height: 200px;
+    left: calc(50% - 100px);
+    top: calc(50% - 100px);
+    width: 200px;
+}
+
+.spinner.smooth::after {
+    border-left: 4px solid var(--purple);
+    border-top: 4px solid var(--purple);
+}
+
+.visible {
+    opacity: 1;
+}
+
+.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+@media only screen and (max-width: 1300px) {
+    #query {
+        width: 78%;
+    }
+}
+
+@media only screen and (max-width: 850px) {
+    #top-bar,
+    #query {
+        width: 70%;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    #movies {
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .movie,
+    .movie:hover {
+        margin: 10px 5px;
+        width: 46%;
+    }
+
+    .links span {
+        font-size: 1.1rem;
+        height: 2.4rem;
+        margin: 2px;
+        width: 2.4rem;
+    }
+
+    #top-bar {
+        width: 100%;
+    }
+
+    #query {
+        font-size: 2rem;
+        margin-left: 2%;
+        width: 70%;
+    }
+
+    #query:hover,
+    #query:focus {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    #search-results {
+        left: 0;
+        width: 94%;
+    }
+
+    .search-result .name {
+        overflow: hidden;
+        padding: 15px 10px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 60%;
+    }
+
+    .search-result .year {
+        float: right;
+        padding: 25px 0;
+    }
+
+    #toggle-countdown-button,
+    #toggle-edit-button,
+    .add-movie-button,
+    .delete-movie-button {
+        font-size: 2.5rem;
+        height: 2.5rem;
+        width: 2.5rem;
+    }
+
+    .add-movie-button {
+        float: left;
+    }
+}
+
+@media only screen and (max-width: 350px) {
+    html {
+        font-size: 88%;
+    }
+}

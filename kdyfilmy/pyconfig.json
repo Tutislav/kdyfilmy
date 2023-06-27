@@ -1,0 +1,17 @@
+{
+    "packages": [
+        "beautifulsoup4",
+        "lxml",
+        "sortedcontainers"
+    ],
+    "fetch": [
+        {
+            "files": [
+                "movieapi.py"
+            ]
+        }
+    ],
+    "splashscreen": {
+        "enabled": false
+    }
+}

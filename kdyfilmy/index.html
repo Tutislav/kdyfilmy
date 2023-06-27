@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="cs">
+    <head>
+        <title>Kdy Filmy</title>
+        <meta charset="UTF-8">
+        <meta name="description" content="Jednoduchý web, který zobrazuje datumy vydání filmů v kině, v digitální distribuci a na DVD.">
+        <meta name="keywords" content="filmy, datum vydání, kino, digitální distribuce, dvd, odpočet">
+        <meta name="author" content="Tutislav">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" href="icon.png" type="image/png">
+        <link rel="stylesheet" href="https://pyscript.net/releases/2023.05.1/pyscript.css">
+        <link rel="stylesheet" href="style.css">
+        <script defer src="https://pyscript.net/releases/2023.05.1/pyscript.js"></script>
+    </head>
+    <body>
+        <span id="spinner" class="smooth spinner"></span>
+        <span id="top-bar">
+            <input type="text" name="query" id="query" placeholder="Vyhledej film" onkeydown="pyscript.interpreter.globals.get('search')()">
+            <span id="toggle-countdown-button" title="Přepnout odpočet" onclick="pyscript.interpreter.globals.get('toggle_countdown')()">
+                <i class="bi bi-5-square-fill visible"></i><i class="bi bi-5-square hidden"></i>
+            </span>
+            <span id="toggle-edit-button" title="Upravit" onclick="pyscript.interpreter.globals.get('toggle_edit')()">
+                <i class="bi bi-wrench-adjustable-circle visible"></i><i class="bi bi-wrench-adjustable-circle-fill hidden"></i>
+            </span>
+        </span>
+        <div id="search-results"></div>
+        <div id="movies"></div>
+        <div id="nomovies" class="hidden">
+            <i class="bi bi-arrow-90deg-up"></i>Začni tím, že si přidáš film
+        </div>
+        
+        <py-config type="json" src="pyconfig.json"></py-config>
+        <py-script src="main.py"></py-script>
+    </body>
+</html>
