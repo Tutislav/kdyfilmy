@@ -9,6 +9,7 @@ from sortedcontainers import SortedList
 from movieapi import MovieAPI
 
 
+COOKIES_MAX_AGE = 60 * 60 * 24 * 400
 movieapi = MovieAPI()
 movies = SortedList(key=lambda x:x["delta_days"])
 search_results = []
@@ -189,6 +190,10 @@ async def save_cookies():
         movies_cookie.append(movie["url"])
     cookies = SimpleCookie()
     cookies["data"] = dumps(movies_cookie)
+    cookies["data"].update({
+        "max-age": COOKIES_MAX_AGE,
+        "samesite": "Lax"
+    })
     document.cookie = cookies["data"].OutputString()
 
 async def main():
