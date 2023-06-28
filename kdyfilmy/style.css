@@ -390,7 +390,8 @@ a:visited {
     }
 
     .movie,
-    .movie:hover {
+    .movie:hover,
+    .movie:focus {
         margin: 10px 5px;
         width: 46%;
     }
