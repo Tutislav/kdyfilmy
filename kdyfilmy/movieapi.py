@@ -80,21 +80,21 @@ class CSFD():
         rating = soup.select_one("div.film-rating-average").text.lstrip().rstrip()
         cinema_date = "?"
         cinema_released = False
-        li_date = soup.select_one("li.divider")
+        p_date_types = soup.select("li.divider p")
         digital_date = "?"
         digital_released = False
         delta_days = 9999
-        if li_date != None:
-            p_date_type = li_date.select_one("p").text
-            date = li_date.select("span")[1].text.lstrip().rstrip()
-            date = date[0:date.find("\n")]
-            delta_days = (datetime.strptime(date, "%d.%m.%Y") - datetime.now()).days
-            if "VOD" in p_date_type:
-                digital_date = date
-                digital_released = True
-            else:
-                cinema_date = date
-                cinema_released = True if datetime.now() >= datetime.strptime(date, "%d.%m.%Y") else False
+        if p_date_types != None:
+            for p_date_type in p_date_types:
+                date = p_date_type.parent.select("span")[1].text.lstrip().rstrip()
+                date = date[0:date.find("\n")]
+                if "V kinech od" in p_date_type.text:
+                    cinema_date = date
+                    cinema_released = True if datetime.now() >= datetime.strptime(date, "%d.%m.%Y") else False
+                    delta_days = (datetime.strptime(date, "%d.%m.%Y") - datetime.now()).days
+                elif "VOD" in p_date_type.text:
+                    digital_date = date
+                    digital_released = True
         result = {
             "name": name,
             "name_eng": name_eng,
