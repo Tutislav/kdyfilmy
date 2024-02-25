@@ -71,7 +71,9 @@ class CSFD():
         name_eng = soup.find("img", {"title": "USA"})
         if name_eng != None and not "pracovní název" in name_eng.parent.text:
             name_eng = name_eng.parent.text.lstrip().rstrip()
-            name_eng = name_eng[0:name_eng.find("\n")]
+            newline_index = name_eng.find("\n")
+            if newline_index > 0:
+                name_eng = name_eng[0:newline_index]
             if len(name_eng) == 0:
                 name_eng = name
         else:
@@ -87,7 +89,9 @@ class CSFD():
         if p_date_types != None:
             for p_date_type in p_date_types:
                 date = p_date_type.parent.select("span")[1].text.lstrip().rstrip()
-                date = date[0:date.find("\n")]
+                newline_index = date.find("\n")
+                if newline_index > 0:
+                    date = date[0:newline_index]
                 country = p_date_type.parent.select_one("img").attrs["alt"]
                 if "V kinech od" in p_date_type.text and "Česko" in country:
                     cinema_date = date
