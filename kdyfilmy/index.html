@@ -3,8 +3,8 @@
     <head>
         <title>Kdy Filmy</title>
         <meta charset="UTF-8">
-        <meta name="description" content="Jednoduchý web, který zobrazuje datumy vydání filmů v kině, v digitální distribuci a na DVD.">
-        <meta name="keywords" content="filmy, datum vydání, kino, digitální distribuce, dvd, odpočet">
+        <meta name="description" content="Jednoduchý web, který zobrazuje datumy vydání filmů a seriálů v kině, v digitální distribuci a na DVD.">
+        <meta name="keywords" content="filmy, seriály, datum vydání, kino, digitální distribuce, dvd, odpočet">
         <meta name="author" content="Tutislav">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="icon" href="icon.png" type="image/png">
@@ -15,7 +15,7 @@
     <body>
         <span id="spinner" class="smooth spinner"></span>
         <span id="top-bar">
-            <input type="text" name="query" id="query" placeholder="Vyhledej film" onkeydown="pyscript.interpreter.globals.get('search')()">
+            <input type="text" name="query" id="query" placeholder="Vyhledej film nebo seriál" onkeydown="pyscript.interpreter.globals.get('search')()">
             <span id="toggle-countdown-button" title="Přepnout odpočet" onclick="pyscript.interpreter.globals.get('toggle_countdown')()">
                 <i class="bi bi-5-square-fill visible"></i><i class="bi bi-5-square hidden"></i>
             </span>
@@ -26,7 +26,7 @@
         <div id="search-results"></div>
         <div id="movies"></div>
         <div id="nomovies" class="hidden">
-            <i class="bi bi-arrow-90deg-up"></i>Začni tím, že si přidáš film
+            <i class="bi bi-arrow-90deg-up"></i>Začni tím, že si přidáš film nebo seriál
         </div>
         
         <py-config type="json" src="pyconfig.json"></py-config>

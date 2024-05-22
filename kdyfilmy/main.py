@@ -32,7 +32,6 @@ async def search():
                 if any(search_result["url"] == movie["url"] for movie in movies):
                     search_results.remove(search_result)
                     continue
-            search_results = search_results[0:4]
             for i, search_result in enumerate(search_results):
                 search_result.update({"id": i})
                 span_search_result = '''<span class="search-result" id="search-result''' + str(search_result["id"]) + '''">
@@ -89,7 +88,9 @@ async def add_movie(q: str, focus: bool = False):
     movie_dict = await movieapi.get(q)
     movie_dict.update({"id": len(movies)})
     if not any(movie_dict["name"] == movie["name"] for movie in movies):
-        date_class = "released" if movie_dict["cinema_released"] else "unreleased"
+        cinema_date_class = "released" if movie_dict["cinema_released"] else "unreleased"
+        tv_date_class = "released" if movie_dict["tv_released"] else "unreleased"
+        digital_date_class = "released" if movie_dict["digital_released"] else "unreleased"
         delta_days = ""
         if movie_dict["delta_days"] > 0 and movie_dict["delta_days"] < 9999:
             delta_class = "delta-days"
@@ -114,11 +115,17 @@ async def add_movie(q: str, focus: bool = False):
                         </span>
                     </span>
                     <span class="poster">''' + delta_days + '''<img src="''' + movie_dict['poster'] + '''"></span>
-                    <span class="name" title="''' + movie_dict["name"] + '''">''' + movie_dict["name"] + '''</span>
-                    <span><span class="type">V kině: </span><b class="''' + date_class + '''">''' + movie_dict["cinema_date"] + '''</b></span><br>
-                    <span id="digital_date''' + str(movie_dict['id']) + '''"><span class="type">Digital: </span><b>...</b></span><br>
-                    <span id="dvd_date''' + str(movie_dict['id']) + '''"><span class="type">DVD: </span><b>...</b></span>
-                </span>'''
+                    <span class="name" title="''' + movie_dict["name"] + '''">''' + movie_dict["name"] + '''</span>'''
+        if movie_dict["item_type"] == "movie":
+            span_movie += '''<span><span class="type">V kině: </span><b class="''' + cinema_date_class + '''">''' + movie_dict["cinema_date"] + '''</b></span><br>
+                        <span id="digital_date''' + str(movie_dict['id']) + '''"><span class="type">Digital: </span><b>...</b></span><br>
+                        <span id="dvd_date''' + str(movie_dict['id']) + '''"><span class="type">DVD: </span><b>...</b></span>'''
+        else:
+            if movie_dict["tv_date"] != "?" and movie_dict["digital_date"] == "?":
+                span_movie += '''<span><span class="type">V TV: </span><b class="''' + tv_date_class + '''">''' + movie_dict["tv_date"] + '''</b></span><br>'''
+            else:
+                span_movie += '''<span id="digital_date''' + str(movie_dict['id']) + '''"><span class="type">Digital: </span><b class="''' + digital_date_class + '''">''' + movie_dict["digital_date"] + '''</b></span>'''
+        span_movie += "</span>"
         index = movies.bisect(movie_dict)
         if len(movies) > index:
             movie_prev = Element("movie" + str(movies[index]["id"])).element
@@ -149,18 +156,19 @@ async def delete_movie(id: int):
 
 async def get_details(movie_dict: dict):
     movie_dict = await movieapi.get_details(movie_dict)
-    span_digital_date_value = Element("digital_date" + str(movie_dict['id']) + " b").element
-    span_dvd_date_value = Element("dvd_date" + str(movie_dict['id']) + " b").element
-    span_digital_date_value.innerHTML = movie_dict["digital_date"]
-    span_dvd_date_value.innerHTML = movie_dict["dvd_date"]
-    if (movie_dict["digital_released"]):
-        span_digital_date_value.classList.add("released")
-    else:
-         span_digital_date_value.classList.add("unreleased")
-    if (movie_dict["dvd_released"]):
-        span_dvd_date_value.classList.add("released")
-    else:
-         span_dvd_date_value.classList.add("unreleased")
+    if movie_dict["item_type"] == "movie":
+        span_digital_date_value = Element("digital_date" + str(movie_dict['id']) + " b").element
+        span_dvd_date_value = Element("dvd_date" + str(movie_dict['id']) + " b").element
+        span_digital_date_value.innerHTML = movie_dict["digital_date"]
+        span_dvd_date_value.innerHTML = movie_dict["dvd_date"]
+        if (movie_dict["digital_released"]):
+            span_digital_date_value.classList.add("released")
+        else:
+            span_digital_date_value.classList.add("unreleased")
+        if (movie_dict["dvd_released"]):
+            span_dvd_date_value.classList.add("released")
+        else:
+            span_dvd_date_value.classList.add("unreleased")
     span_movie = Element("movie" + str(movie_dict['id'])).element
     a_imdb = span_movie.children[0].children[1]
     a_imdb.href = movie_dict["imdb_url"]
