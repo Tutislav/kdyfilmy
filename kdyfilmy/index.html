@@ -15,7 +15,9 @@
     <body>
         <span id="spinner" class="smooth spinner"></span>
         <span id="top-bar">
-            <input type="text" name="query" id="query" placeholder="Vyhledej film nebo seriál" onkeydown="pyscript.interpreter.globals.get('search')()">
+            <input type="text" name="query" id="query" placeholder="Vyhledej film nebo seriál"
+                   onkeypress="pyscript.interpreter.globals.get('search_keypress')()"
+                   onkeyup="pyscript.interpreter.globals.get('search_keyup')()">
             <span id="toggle-countdown-button" title="Přepnout odpočet" onclick="pyscript.interpreter.globals.get('toggle_countdown')()">
                 <i class="bi bi-5-square-fill visible"></i><i class="bi bi-5-square hidden"></i>
             </span>

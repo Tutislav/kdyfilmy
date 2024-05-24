@@ -13,36 +13,50 @@ COOKIES_MAX_AGE = 60 * 60 * 24 * 400
 movieapi = MovieAPI()
 movies = SortedList(key=lambda x:x["delta_days"])
 search_results = []
-search_running = False
+search_typing = False
+search_wait_task = None
 input_query = Element("query").element
 div_movies = Element("movies").element
 div_search_results = Element("search-results").element
 div_nomovies = Element("nomovies").element
 
+async def search_keypress():
+    global search_typing, search_wait_task
+    search_typing = True
+    if search_wait_task != None:
+        search_wait_task.cancel()
+
+async def search_keyup():
+    global search_typing, search_wait_task
+    search_typing = False
+    search_wait_task = asyncio.ensure_future(search_wait())
+
+async def search_wait():
+    await asyncio.sleep(0.5)
+    if search_typing == False:
+        await search()
+
 async def search():
-    global search_results, search_running
-    if not search_running:
-        search_running = True
-        search_results = []
-        div_search_results.innerHTML = ""
-        query_text = input_query.value
-        if input_query.value == query_text and len(query_text) > 3:
-            search_results = await movieapi.search(query_text)
-            for search_result in search_results:
-                if any(search_result["url"] == movie["url"] for movie in movies):
-                    search_results.remove(search_result)
-                    continue
-            for i, search_result in enumerate(search_results):
-                search_result.update({"id": i})
-                span_search_result = '''<span class="search-result" id="search-result''' + str(search_result["id"]) + '''">
-                                        <span class="add-movie-button" onclick="pyscript.interpreter.globals.get(\'add_movie\')(\'''' + search_result["url"] + '''\', 1)">
-                                            <i class="bi bi-plus-circle-dotted"></i><i class="bi bi-plus-circle-fill"></i>
-                                        </span>
-                                        <span class="name">''' + search_result["name"] + '''</span>
-                                        <span class="year">''' + search_result["year"] + '''</span>
-                                    </span>'''
-                div_search_results.innerHTML = div_search_results.innerHTML + span_search_result
-        search_running = False
+    global search_results
+    search_results = []
+    div_search_results.innerHTML = ""
+    query_text = input_query.value
+    if input_query.value == query_text and len(query_text) > 3:
+        search_results = await movieapi.search(query_text)
+        for search_result in search_results:
+            if any(search_result["url"] == movie["url"] for movie in movies):
+                search_results.remove(search_result)
+                continue
+        for i, search_result in enumerate(search_results):
+            search_result.update({"id": i})
+            span_search_result = '''<span class="search-result" id="search-result''' + str(search_result["id"]) + '''">
+                                    <span class="add-movie-button" onclick="pyscript.interpreter.globals.get(\'add_movie\')(\'''' + search_result["url"] + '''\', 1)">
+                                        <i class="bi bi-plus-circle-dotted"></i><i class="bi bi-plus-circle-fill"></i>
+                                    </span>
+                                    <span class="name">''' + search_result["name"] + '''</span>
+                                    <span class="year">''' + search_result["year"] + '''</span>
+                                </span>'''
+            div_search_results.innerHTML = div_search_results.innerHTML + span_search_result
 
 async def toggle_countdown():
     toggle_countdown_button = Element("toggle-countdown-button").element
