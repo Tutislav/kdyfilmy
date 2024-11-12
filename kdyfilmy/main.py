@@ -2,7 +2,7 @@ import asyncio
 from http.cookies import SimpleCookie
 from json import dumps, loads
 
-from js import document
+from js import document, window
 from pyscript import Element
 from sortedcontainers import SortedList
 
@@ -200,6 +200,14 @@ async def hide_spinner():
         span_spinner.remove()
 
 async def load_cookies():
+    movies_url_query = window.location.search
+    if "?movies=" in movies_url_query:
+        saved_movies = movies_url_query.split("=")[1].split(",")
+        for movie in saved_movies:
+            if len(movie) == 0:
+                saved_movies.remove(movie)
+        if len(saved_movies) > 0:
+            return saved_movies
     cookies = SimpleCookie(document.cookie)
     if "data" in cookies:
         return loads(cookies["data"].value)
@@ -208,8 +216,18 @@ async def load_cookies():
 
 async def save_cookies():
     movies_cookie = []
+    movies_url_query = ""
     for movie in movies:
-        movies_cookie.append(movie["url"])
+        url = movie["url"]
+        if "https://www.csfd.cz" in url:
+            start_index = url.find("/film/") + len("/film/")
+            if start_index > 0:
+                url = url[start_index:]
+            end_index = url.rfind("-")
+            if end_index > 0:
+                url = url[:end_index]
+        movies_cookie.append(url)
+        movies_url_query += url + ","
     cookies = SimpleCookie()
     cookies["data"] = dumps(movies_cookie)
     cookies["data"].update({
@@ -217,6 +235,7 @@ async def save_cookies():
         "samesite": "Lax"
     })
     document.cookie = cookies["data"].OutputString()
+    window.history.replaceState("", "", "?movies=" + movies_url_query)
 
 async def main():
     saved_movies = await load_cookies()
@@ -226,7 +245,10 @@ async def main():
     else:
         tasks = []
         for movie in saved_movies:
-            tasks.append(asyncio.create_task(add_movie(movie)))
+            url = movie
+            if not "https://www.csfd.cz" in url:
+                url = "https://www.csfd.cz/film/" + url
+            tasks.append(asyncio.create_task(add_movie(url)))
         await asyncio.gather(*tasks)
         await save_cookies()
 
