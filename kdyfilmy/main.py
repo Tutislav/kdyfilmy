@@ -223,7 +223,7 @@ async def save_cookies():
             start_index = url.find("/film/") + len("/film/")
             if start_index > 0:
                 url = url[start_index:]
-            end_index = url.rfind("-")
+            end_index = url.find("/prehled")
             if end_index > 0:
                 url = url[:end_index]
         movies_cookie.append(url)
