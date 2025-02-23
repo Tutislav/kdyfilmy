@@ -219,6 +219,15 @@ class DVDsReleaseDates():
         dates_unreleased = soup.select("span.future.bold")
         date_estimated = soup.select_one("span.future")
         a_imdb = soup.select_one("span.imdblink.vam a")
+        error = soup.select_one("td.medlargetext")
+        dvds_rd_url = ""
+        if error != None:
+            error_text = error.text.lower()
+            if "no results" in error_text and ":" in movie_dict["name_eng"]:
+                movie_dict["name_eng"] = movie_dict["name_eng"].split(":")[0]
+                return await self.search(movie_dict)
+        else:
+            dvds_rd_url = url.format(q=q)
         if a_imdb == None:
             a_imdb = soup.select_one("#movie > a")
         imdb_url = ""
@@ -283,7 +292,8 @@ class DVDsReleaseDates():
             "dvd_released": dvd_released,
             "dvd_date": dvd_date,
             "imdb_url": imdb_url,
-            "imdb_rating": imdb_rating
+            "imdb_rating": imdb_rating,
+            "dvds_rd_url": dvds_rd_url
         }
         if digital_date != "?":
             dates.update({

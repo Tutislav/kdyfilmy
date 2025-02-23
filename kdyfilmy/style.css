@@ -14,6 +14,7 @@ html {
     --csfd-red: #8c0406;
     --imdb-yellow: #F5C518;
     --dabingforum-blue: #0076B1;
+    --dvdsreleasedates-gray: #595959;
     font-family: "Montserrat", sans-serif;
     font-weight: 400;
 }
@@ -188,10 +189,19 @@ body {
     border: 0.2rem solid var(--dabingforum-blue);
 }
 
+.dvdsreleasedates span {
+    background-color: var(--dvdsreleasedates-gray);
+    border: 0.2rem solid var(--dvdsreleasedates-gray);
+}
+
 .links img {
     border-radius: 10px;
     height: 100%;
     width: 100%;
+}
+
+.links .bi {
+    font-size: 1.5rem;
 }
 
 a,

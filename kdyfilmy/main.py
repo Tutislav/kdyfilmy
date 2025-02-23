@@ -124,6 +124,9 @@ async def add_movie(q: str, focus: bool = False):
                         <a class="dabingforum hidden" target="_blank" href="" tabindex="-1">
                             <span title="Dabingforum.cz"><img src="https://www.dabingforum.cz/styles/prosilver/theme/images/site_logo_star.png"></span>
                         </a>
+                        <a class="dvdsreleasedates hidden" target="_blank" href="" tabindex="-1">
+                            <span title="DVDs Release Dates"><i class="bi bi-disc"></i></span>
+                        </a>
                         <span class="delete-movie-button hidden" title="Smazat" onclick="pyscript.interpreter.globals.get(\'delete_movie\')(\'''' + str(movie_dict['id']) + '''\')">
                             <i class="bi bi-trash"></i><i class="bi bi-trash-fill"></i>
                         </span>
@@ -193,6 +196,10 @@ async def get_details(movie_dict: dict):
     a_dabingforum.href = movie_dict["dabing_url"]
     if movie_dict["dabing_url"] != "":
         a_dabingforum.className = "dabingforum visible"
+    a_dvdsreleasedates = span_movie.children[0].children[3]
+    a_dvdsreleasedates.href = movie_dict["dvds_rd_url"]
+    if movie_dict["dvds_rd_url"] != "":
+        a_dvdsreleasedates.className = "dvdsreleasedates visible"
 
 async def hide_spinner():
     span_spinner = Element("spinner").element
