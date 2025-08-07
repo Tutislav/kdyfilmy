@@ -195,6 +195,7 @@ class CSFD():
         result = {
             "name": name,
             "name_eng": name_eng,
+            "year": year,
             "poster": poster,
             "rating": rating,
             "cinema_date": cinema_date,
@@ -211,9 +212,13 @@ class CSFD():
 
 class DVDsReleaseDates():
     async def search(self, movie_dict: dict):
-        q = parse.quote_plus(movie_dict["name_eng"])
-        url = "https://www.dvdsreleasedates.com/search/?searchStr={q}"
-        data = await get_data(url.format(q=q))
+        q = parse.quote_plus(movie_dict["name_eng"] + " (" + movie_dict["year"] + ")")
+        search_url = "https://www.dvdsreleasedates.com/livesearch.php?q={q}"
+        search_data = await get_data(search_url.format(q=q))
+        search_soup = BeautifulSoup(search_data, "lxml")
+        data_url = "https://www.dvdsreleasedates.com/{path}"
+        path = search_soup.select_one("a").attrs["href"]
+        data = await get_data(data_url.format(path=path))
         soup = BeautifulSoup(data, "lxml")
         dates_released = soup.select("span.past.bold")
         dates_unreleased = soup.select("span.future.bold")
@@ -227,7 +232,7 @@ class DVDsReleaseDates():
                 movie_dict["name_eng"] = movie_dict["name_eng"].split(":")[0]
                 return await self.search(movie_dict)
         else:
-            dvds_rd_url = url.format(q=q)
+            dvds_rd_url = data_url.format(path=path)
         if a_imdb == None:
             a_imdb = soup.select_one("#movie > a")
         imdb_url = ""

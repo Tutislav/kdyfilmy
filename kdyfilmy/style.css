@@ -13,7 +13,7 @@ html {
     --unreleased: #ff0000;
     --csfd-red: #8c0406;
     --imdb-yellow: #F5C518;
-    --dabingforum-blue: #0076B1;
+    --dabingforum-blue: #00ccff;
     --dvdsreleasedates-gray: #595959;
     font-family: "Montserrat", sans-serif;
     font-weight: 400;
@@ -408,9 +408,9 @@ a:visited {
 
     .links span {
         font-size: 1.1rem;
-        height: 2.4rem;
+        height: 2rem;
         margin: 2px;
-        width: 2.4rem;
+        width: 2rem;
     }
 
     #top-bar {

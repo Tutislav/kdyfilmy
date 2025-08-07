@@ -101,7 +101,7 @@ async def toggle_edit():
 async def add_movie(q: str, focus: bool = False):
     movie_dict = await movieapi.get(q)
     movie_dict.update({"id": len(movies)})
-    if not any(movie_dict["name"] == movie["name"] for movie in movies):
+    if not any(movie_dict["name"] == movie["name"] and movie_dict["year"] == movie["year"] for movie in movies):
         cinema_date_class = "released" if movie_dict["cinema_released"] else "unreleased"
         tv_date_class = "released" if movie_dict["tv_released"] else "unreleased"
         digital_date_class = "released" if movie_dict["digital_released"] else "unreleased"
@@ -122,7 +122,7 @@ async def add_movie(q: str, focus: bool = False):
                             <span title="IMDb"><img src="https://m.media-amazon.com/images/G/01/IMDb/brand/guidelines/imdb/IMDb_Logo_Rectangle_Gold._CB443386186_.png"></span>
                         </a>
                         <a class="dabingforum hidden" target="_blank" href="" tabindex="-1">
-                            <span title="Dabingforum.cz"><img src="https://www.dabingforum.cz/styles/prosilver/theme/images/site_logo_star.png"></span>
+                            <span title="Dabingforum.cz"><img src="https://www.dabingforum.cz/favicon/favicon-96x96.png"></span>
                         </a>
                         <a class="dvdsreleasedates hidden" target="_blank" href="" tabindex="-1">
                             <span title="DVDs Release Dates"><i class="bi bi-disc"></i></span>
