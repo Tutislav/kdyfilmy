@@ -216,9 +216,16 @@ class DVDsReleaseDates():
         search_url = "https://www.dvdsreleasedates.com/livesearch.php?q={q}"
         search_data = await get_data(search_url.format(q=q))
         search_soup = BeautifulSoup(search_data, "lxml")
-        data_url = "https://www.dvdsreleasedates.com/{path}"
-        path = search_soup.select_one("a").attrs["href"]
-        data = await get_data(data_url.format(path=path))
+        search_link = search_soup.select_one("a")
+        formatted_url = ""
+        if search_link != None:
+            q = search_link.attrs["href"]
+            search_url = "https://www.dvdsreleasedates.com/{q}"
+        else:
+            q = parse.quote_plus(movie_dict["name_eng"])
+            search_url = "https://www.dvdsreleasedates.com/search/?searchStr={q}"
+        formatted_url = search_url.format(q=q)
+        data = await get_data(formatted_url)
         soup = BeautifulSoup(data, "lxml")
         dates_released = soup.select("span.past.bold")
         dates_unreleased = soup.select("span.future.bold")
@@ -232,7 +239,7 @@ class DVDsReleaseDates():
                 movie_dict["name_eng"] = movie_dict["name_eng"].split(":")[0]
                 return await self.search(movie_dict)
         else:
-            dvds_rd_url = data_url.format(path=path)
+            dvds_rd_url = formatted_url
         if a_imdb == None:
             a_imdb = soup.select_one("#movie > a")
         imdb_url = ""
