@@ -323,7 +323,7 @@ class Dabingforum():
         url = "https://dabingforum.cz/goto/film/{q}" 
         data = await get_data(url.format(q=q))
         dabing_url = ""
-        if not "Litujeme, ale tohle tu nemáme" in data and movie_dict["item_type"] == "movie":
+        if len(data) > 0 and not "Litujeme, ale tohle tu nemáme" in data and movie_dict["item_type"] == "movie":
             dabing_url = url.format(q=q)
         else:
             results = await self.search(name, movie_dict["item_type"])
@@ -370,9 +370,15 @@ async def get_data(url: str):
     if "HOME" in environ and environ["HOME"] == "/home/pyodide":
         from pyodide.http import pyfetch
         data_raw = await pyfetch(PROXY + url, method="GET", cache="force-cache", priority="high")
-        data = await data_raw.string()
+        if data_raw.status == 200:
+            data = await data_raw.string()
+        else:
+            data = ""
     else:
         from urllib import request
         with request.urlopen(request.Request(url, headers=HEADERS)) as urldata:
-            data = urldata.read().decode()
+            if urldata.code == 200:
+                data = urldata.read().decode()
+            else:
+                data = ""
     return data
